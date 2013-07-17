@@ -12,23 +12,28 @@ module S3Website
 end
 
 %w{
+  config_loader
+  diff_helper
   errors
+  jekyll
+  keyboard
+  model/endpoint
+  model/local_resource
+  nanoc
+  parallelism
+  paths
+  retry
+  tasks
   upload
   uploader
-  tasks
-  config_loader
-  retry
-  keyboard
-  diff_helper
-  endpoint
-  parallelism
-  jekyll
-  nanoc
-  paths
-}.each do |file| 
+}.each do |file|
   require File.dirname(__FILE__) + "/s3_website/#{file}"
 end
 
 %w{invalidator}.each do |file|
   require File.dirname(__FILE__) + "/cloudfront/#{file}"
+end
+
+%w{local_resources_ds}.each do |file|
+  require File.dirname(__FILE__) + "/filey/#{file}"
 end

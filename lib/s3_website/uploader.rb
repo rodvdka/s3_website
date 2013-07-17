@@ -18,11 +18,16 @@ module S3Website
       redirects = config['redirects'] || {}
       changed_redirects = setup_redirects redirects, config, s3
 
-      deleted_files_count = remove_superfluous_files(s3, { :s3_bucket => config['s3_bucket'],
-                                                           :site_dir => site_dir,
-                                                           :redirects => redirects,
-                                                           :in_headless_mode => in_headless_mode,
-                                                           :ignore_on_server => config["ignore_on_server"] })
+      deleted_files_count = remove_superfluous_files(
+        s3,
+        {
+          :s3_bucket => config['s3_bucket'],
+          :site_dir => site_dir,
+          :redirects => redirects,
+          :in_headless_mode => in_headless_mode,
+          :ignore_on_server => config["ignore_on_server"]
+        }
+      )
 
       print_done_report config
 
@@ -41,7 +46,10 @@ module S3Website
 
     def self.upload_files(s3, config, site_dir)
       changed_files, new_files = DiffHelper.resolve_files_to_upload(
-        s3.buckets[config['s3_bucket']], site_dir)
+        s3.buckets[config['s3_bucket']],
+        site_dir,
+        config
+      )
       to_upload = changed_files + new_files
       if to_upload.empty?
         puts "No new or changed files to upload"
@@ -66,13 +74,10 @@ module S3Website
 
     def self.upload_file(file, s3, config, site_dir)
       Retry.run_with_retry do
-        upload = Upload.new(file, s3, config, site_dir)
-
-        if upload.perform!
-          puts "Upload #{upload.details}: Success!"
-        else
-          puts "Upload #{upload.details}: FAILURE!"
-        end
+        puts file
+        local_resource = LocalResource.new(file, config, site_dir)
+        success = Upload.perform(local_resource, s3, config)
+        puts "Upload #{local_resource.details}: #{success ? 'Success' : 'FAILURE'}!"
       end
     end
 
