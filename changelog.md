@@ -2,25 +2,6 @@
 
 This project uses [Semantic Versioning](http://semver.org).
 
-## 1.4.5
-
-* If max-age=0, set `Cache-Control: no-cache, max-age=0`
-
-## 1.4.4
-
-* Add support for eu-west-1 as a location constraint
-
-## 1.4.3
-
-* Decrease the default concurrency level to 3
-
-  See https://github.com/laurilehmijoki/s3_website/issues/8#issuecomment-24855991
-  for discussion.
-
-## 1.4.2
-
-* Fix `s3_website cfg apply` for CloudFront setup (#33)
-
 ## 1.4.1
 
 * Fix diff for Windows users

@@ -34,11 +34,15 @@ Here's how you can get started:
 
 ### For Jekyll users
 
-S3_website will automatically discover your website in the *_site* directory.
+Run the `s3_website cfg create` in the root directory of your Jekyll project.
+`s3_website` will automatically look for the site output in the *_site*
+directory.
 
 ### For Nanoc users
 
-S3_website will automatically discover your website in the *public/output* directory.
+Run the `s3_website cfg create` in the root directory of your Nanoc project.
+`s3_website` will automatically look for the site output in the *public/output*
+directory.
 
 ### For others
 
@@ -308,7 +312,7 @@ The code above will assume that you have the `s3_website.yml` in the directory
 
 ### Specifying custom concurrency level
 
-By default, `s3_website` does 3 operations in parallel. An operation can be an
+By default, `s3_website` does 25 operations in parallel. An operation can be an
 HTTP PUT operation against the S3 API, for example.
 
 You can increase the concurrency level by adding the following setting into the
@@ -318,10 +322,8 @@ You can increase the concurrency level by adding the following setting into the
 concurrency_level: <integer>
 ```
 
-However, because S3 throttles connections, there's an upper limit to the
-level of parallelism. If you start to see end-of-file errors, decrease the
-concurrency level. Conversely, if you don't experience any errors, you can
-increase the concurrency level and thus benefit from faster uploads.
+If your site has 100 files, it's a good idea to set the concurrency level to
+100. As a result, `s3_website` will process each of your 100 files in parallel.
 
 If you experience the "too many open files" error, either increase the amount of
 maximum open files (on Unix-like systems, see `man ulimit`) or decrease the
@@ -334,7 +336,7 @@ See
 
 ## Known issues
 
-Please create an issue and send a pull request if you spot any.
+None. Please send a pull request if you spot any.
 
 ## Development
 
@@ -384,7 +386,6 @@ Contributors (in alphabetical order)
 * Chris Kelly
 * Chris Moos
 * David Michael Barr
-* Greg Karékinian
 * László Bácsi
 * Mason Turner
 * Michael Bleigh
